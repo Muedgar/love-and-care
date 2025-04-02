@@ -1,14 +1,8 @@
 import { getNewsArticles } from "@/lib";
-import { marked } from 'marked';  // You'll need to install this package
+import { Article } from "@/types/article";
 
-// Format markdown content to HTML
-export function formatContent(content: string): string {
-  if (!content) return '';
-  return marked(content);
-}
-
-  // Helper function to get related articles
-  export function getRelatedArticles(currentArticle:any, count = 3) {
+// Helper function to get related articles
+export function getRelatedArticles(currentArticle: Article, count = 3): Article[] {
     
     const allArticles = getNewsArticles();
     

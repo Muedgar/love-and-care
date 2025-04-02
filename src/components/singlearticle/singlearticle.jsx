@@ -4,11 +4,21 @@ import { Button } from "@radix-ui/themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from 'react';
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react";
 import { formatContent, getRelatedArticles } from "@/utils";
 
 export function SingleArticle({ article }) {
   const router = useRouter();
+  const [formattedContent, setFormattedContent] = useState('');
+
+  useEffect(() => {
+    async function loadContent() {
+      const formatted = await formatContent(article.content);
+      setFormattedContent(formatted);
+    }
+    loadContent();
+  }, [article.content]);
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -76,7 +86,7 @@ export function SingleArticle({ article }) {
           </div>
           
           {/* Main content rendered from markdown */}
-          <div dangerouslySetInnerHTML={{ __html: formatContent(article.content) }} />
+          <div dangerouslySetInnerHTML={{ __html: formattedContent }} />
         </div>
         
         {/* Share and navigate section */}
