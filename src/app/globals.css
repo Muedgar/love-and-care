@@ -1,26 +1,578 @@
 @import "tailwindcss";
+@import "@radix-ui/themes/styles.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+* { 
+  box-sizing: border-box; 
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+    font-size: 16px; /* Base font size */
+    scroll-behavior: smooth; /* Smooth scrolling */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body { 
+  font-family: sans-serif; 
+  background: #19191b; 
+  overflow-x: hidden; /* Changed from overflow: hidden to allow vertical scrolling */
+  color: #c6d6e8;
+  margin: 0;
+  padding: 0;
+}
+
+.slider-container { 
+  height: auto;
+  min-height: 100vh;
+  width: 100vw; 
+  overflow: hidden; 
+  cursor: grab;
+  position: relative; /* Added for proper positioning context */
+}
+
+.hero-container {
+  background: radial-gradient(10% 10% at 10% 10%, #456 45%, #998 45.5% 45%, #845 45%);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.slider { 
+  display: flex;
+  height: 100vh;
+  will-change: transform; /* Optimize for animations */
+}
+
+.slide { 
+  width: 100vw; 
+  height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 5rem; 
+  flex-shrink: 0;
+  user-select: none; /* Prevent text selection */
+}
+
+.slide-number {
+  display: inline-block;
+}
+
+/* Navigation dots with improved mobile visibility */
+.navigation {
+  width: auto;
+  max-width: 100%; /* Ensure it doesn't overflow */ 
+  position: fixed; /* Changed from absolute to fixed */
+  bottom: 20px; /* Adjusted for better visibility */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 999; /* Increased z-index dramatically */
+  padding: 10px 15px; /* Increased padding for better touch target */
+  border-radius: 30px; /* More rounded for better visual presence */
+  background-color: rgba(0, 0, 0, 0.5); /* Darker background for better contrast */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+  pointer-events: auto; /* Ensure dots remain clickable */
+}
+
+.nav-dot {
+  width: 16px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Add border for better visibility */
+}
+
+.nav-dot:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.2);
+}
+
+.nav-dot.active {
+  background-color: #ffffff;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.herogradient {
+  background: linear-gradient(to right, #333333b6 40%, rgba(68, 136, 153, 0.21) 100%),
+              linear-gradient(to left, rgba(68, 136, 153, 0.21) 40%, #333333b6 100%);
+  filter: blur(5px) contrast(5px) saturate(5px);
+}
+
+/* Prevent image dragging */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Enhanced mobile adjustments */
+@media (max-width: 768px) {
+  .navigation {
+    bottom: 25px; /* Moved slightly higher */
+    padding: 8px 12px; /* Adjusted padding */
+    background-color: rgba(0, 0, 0, 0.7); /* Darker background on mobile */
+  }
+  
+  .nav-dot {
+    width: 14px;
+    height: 14px;
+    margin: 0 4px; /* Add margins for better touch targets */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Specific fixes for very small screens */
+@media (max-width: 480px) {
+  .navigation {
+    bottom: 20px;
+    max-width: 90%; /* Limit width */
+    flex-wrap: wrap; /* Allow wrapping for many dots */
+    justify-content: center;
+  }
+  
+  .nav-dot {
+    width: 12px;
+    height: 12px;
+    margin: 4px; /* More space between dots */
+  }
+}
+/* news css */
+/* Updated News CSS with back image */
+
+.faceflipbox {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  perspective: 80em;
+  margin: 100px auto;   
+}
+
+.faceflipbox *:not(:empty) {
+  transform-style: preserve-3d;
+}
+
+.flipbox-container {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.faces {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background-color: white;
+  transform: rotateX(0deg) rotateY(180deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+.faceflipbox:hover .faces {
+  animation: loadingAnimation 0.5s ease-in forwards;
+}
+
+@keyframes loadingAnimation {
+  from {
+      transform: rotateX(0deg) rotateY(180deg);
+  }
+  to {
+      transform: rotateX(0deg) rotateY(0deg);
+  }
+}
+
+.faces .face {
+  position: absolute;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.09);
+}
+
+/* Face one (front) */
+.face.one {
+  width: 300px;
+  height: 300px;
+  background-color: white;
+  transform: translateZ(25px);
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Content styling for face one */
+.face-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.face-content-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Image styling inside card */
+.face-content-inner > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Text content styling */
+.face-content-inner > h2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: #111827;
+  position: relative;
+  z-index: 3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.face-content-inner > p {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #4B5563;
+  position: relative;
+  z-index: 3;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Link styling */
+.face-content-inner > a,
+.face-content-inner > span {
+  margin-top: auto;
+  font-size: 0.875rem;
+  position: relative;
+  z-index: 3;
+  display: inline-block;
+}
+
+.face-content-inner > a {
+  color: #3B82F6;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.face-content-inner > a:hover {
+  color: #2563EB;
+}
+
+.face-content-inner > span {
+  color: #D97706;
+  font-weight: 500;
+}
+
+/* Face two (back) */
+.two {
+  width: 300px;
+  height: 300px;
+  background-color: white;
+  transform: translateZ(-25px) rotateY(180deg); /* Rotated to face back */
+  overflow: hidden;
+}
+
+/* Back image container */
+.back-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Back image styling */
+.back-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1); /* Darken image for better text contrast */
+  transform: scaleX(-1); /* Flip horizontally for proper orientation */
+}
+
+/* Back content styling */
+.back-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem;
+  color: white;
+  text-align: center;
+  transform: scaleX(-1); /* Flip horizontally to match image */
+  z-index: 2;
+}
+
+.back-date {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.9;
+}
+
+.back-author {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.back-category {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: rgba(59, 130, 246, 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+/* Other faces of the 3D box */
+.three {
+  width: 300px;
+  height: 25px;
+  transform-origin: top;
+  background-color: white;
+  transform: rotateX(-90deg);
+}
+
+.four {
+  width: 300px;
+  height: 25px;
+  transform-origin: bottom;
+  background-color: white;
+  transform: rotateX(90deg);
+  bottom: 0;
+}
+
+.five {
+  width: 25px;
+  height: 300px;
+  background-color: white;
+  transform: rotateY(90deg) translateX(12.5px) translateZ(-12.5px);
+}
+
+.six {
+  width: 25px;
+  height: 300px;
+  background-color: white;
+  right: 0;
+  transform: rotateY(90deg) translateX(12.5px) translateZ(12.5px);
+}
+
+/* News grid layout improvements */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  place-items: center;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Responsive grid adjustments */
+@media (min-width: 768px) {
+  .news-grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .faceflipbox {
+      margin: 60px auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-grid {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small screen adjustments */
+@media (max-width: 640px) {
+  .faceflipbox {
+      margin: 50px auto;
+  }
+}
+
+/* Article Page Styles */
+
+/* Article Content Typography */
+.prose {
+  max-width: 65ch;
+  color: #374151;
+  margin: 0 auto;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.prose ul {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+/* Article Summary Box */
+.summary-box {
+  background-color: #f9fafb;
+  border-left: 4px solid #3b82f6;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-box p {
+  margin-bottom: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* Image Styling */
+.article-hero-image {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Article Meta Information */
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.article-meta-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-meta-item svg {
+  margin-right: 0.25rem;
+}
+
+/* Related Articles Cards */
+.related-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.related-card-image {
+  height: 12rem;
+  position: relative;
+}
+
+.related-card-content {
+  padding: 1rem;
+}
+
+.related-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.related-card-summary {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .article-hero-image {
+    height: 300px;
+  }
+  
+  .article-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .article-meta-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .article-hero-image {
+    height: 250px;
+  }
+  
+  .related-card-image {
+    height: 10rem;
+  }
 }
