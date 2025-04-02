@@ -1,1 +1,2 @@
-export { formatContent, getRelatedArticles } from './dateFormat';
+export { formatContent } from './content';
+export { getRelatedArticles } from './dateFormat';
